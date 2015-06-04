@@ -85,7 +85,7 @@ SELECT  dbo.offers.id ,
         lat ,
         lng
 FROM    dbo.offers, dbo.places
-WHERE dbo.offers.id_place = dbo.places.id
+WHERE dbo.offers.id_place = dbo.places.id AND (expiration_date >= GETDATE() AND GETDATE() <= start_date)
 ";
                 query = BuildWhereClause(query, category, subcategory);
                 using (var command = new SqlCommand(query, connection))
