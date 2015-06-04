@@ -62,10 +62,10 @@
                         }
                     </select>
 
-                    <input type="number" id="txtLat" class="form-control" placeholder="Latitude" step="any" required />
-                    <input type="number" id="txtLng" class="form-control" placeholder="Longitude" step="any" required />
+                    <div id="map-canvas" style="height: 500px; width:500px; margin: 0; padding: 0;"></div>
 
-
+                    @*<input type="number" id="txtLat" class="form-control" placeholder="Latitude" step="any" required />
+                    <input type="number" id="txtLng" class="form-control" placeholder="Longitude" step="any" required />*@
 
                 </div>
                 <div class="modal-footer">
@@ -103,20 +103,56 @@
 </div>
 
 @section scripts {
+
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5X4IQJPxcWDRzKc-Ufq029N55AhJs0As">
+    </script>
+
     <script type="text/javascript">
 
         var newPlaceId;
+        var map;
+        var lat, lng;
+        var marker;
+        
+        google.maps.event.addDomListener(window, 'load', initialize);
+        
+
+        $('#newPlaceModal').on('shown.bs.modal', function () {
+            google.maps.event.trigger(map, 'resize');
+            map.setCenter(new google.maps.LatLng(28, 5));
+        });
+
+        function initialize() {
+            var mapOptions = {
+                center: { lat: 0, lng: 0 },
+                zoom: 2
+            };
+            map = new google.maps.Map(document.getElementById('map-canvas'),
+                mapOptions);
+
+            google.maps.event.addListener(map, 'click', function (event) {
+                if (marker)
+                    marker.setMap(null);
+                lat = event.latLng.A;
+                lng = event.latLng.F;
+                marker = new google.maps.Marker({ position: event.latLng, map: map });
+            });
+        }
 
         $('#newPlaceForm').on('submit', function (e) {
             e.preventDefault();
+
+            if (!lat && !lng)
+                return;
 
             var place = {};
             place.Name = $('#txtName').val();
             place.Description = $('#txtDescription').val();
             place.MainCategory = $('#slctCategory').val();
             place.Subcategory = $('#slctSubcategory').val();
-            place.Lat = $('#txtLat').val().replace(",", ".");
-            place.Lng = $('#txtLng').val().replace(",", ".");
+            place.Lat = lat;
+            place.Lng = lng;
 
             $.ajax({
                 url: '/api/Places',
@@ -213,6 +249,7 @@
                 }
             });
         }
+
     </script>
 }
 

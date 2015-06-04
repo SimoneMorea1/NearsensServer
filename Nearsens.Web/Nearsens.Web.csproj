@@ -258,6 +258,7 @@
     <Content Include="Views\Home\PlaceDetail.cshtml" />
     <Content Include="Views\Home\PlaceOffers.cshtml" />
     <Content Include="Views\Home\OfferDetail.cshtml" />
+    <Content Include="Views\Home\Map.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
