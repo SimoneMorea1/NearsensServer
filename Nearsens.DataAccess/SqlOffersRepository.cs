@@ -27,7 +27,7 @@ namespace Nearsens.DataAccess
                 throw new ApplicationException(string.Format("ConnectionString '{0}' not found", connectionStringName));
             connectionString = cs.ConnectionString;
         }
-        public IEnumerable<GetOffersByPlaceIdQuery> GetOffersByPlaceId(long id)
+        public IEnumerable<GetOffersByPlaceIdQuery> GetOffersByPlaceId(long id, bool onlyValidOffers)
         {
             List<GetOffersByPlaceIdQuery> offers = new List<GetOffersByPlaceIdQuery>();
 
@@ -44,6 +44,8 @@ SELECT  id ,
 FROM    dbo.offers
 WHERE id_place = @id
 ";
+                if (onlyValidOffers)
+                    query += " AND CAST(GETDATE() as DATE) BETWEEN start_date AND expiration_date";
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.Add(new SqlParameter("@id", id));
@@ -85,7 +87,7 @@ SELECT  dbo.offers.id ,
         lat ,
         lng
 FROM    dbo.offers, dbo.places
-WHERE dbo.offers.id_place = dbo.places.id AND (expiration_date >= GETDATE() AND GETDATE() <= start_date)
+WHERE dbo.offers.id_place = dbo.places.id  AND CAST(GETDATE() as DATE) BETWEEN start_date AND expiration_date
 ";
                 query = BuildWhereClause(query, category, subcategory);
                 using (var command = new SqlCommand(query, connection))
