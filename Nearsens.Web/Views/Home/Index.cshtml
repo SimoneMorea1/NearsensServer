@@ -64,7 +64,7 @@
 
                     <br style="clear: both" />
 
-                    <input type="text" id="autocomplete" class="form-control" placeholder="Insert address" />
+                    <input type="text" id="txtAutocomplete" class="form-control" placeholder="Insert address" />
                     <div id="map-canvas" style="height: 500px; width:500px; margin: 0; padding: 0;"></div>
 
                 </div>
@@ -104,8 +104,12 @@
 
 @section scripts {
 
-    <script type="text/javascript"
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5X4IQJPxcWDRzKc-Ufq029N55AhJs0As">
+    @*<script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyA5X4IQJPxcWDRzKc-Ufq029N55AhJs0As">
+    </script>*@
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false">
+
     </script>
 
     <script type="text/javascript">
@@ -121,17 +125,19 @@
 
         $('#newPlaceModal').on('shown.bs.modal', function () {
             google.maps.event.trigger(map, 'resize');
-            map.setCenter(new google.maps.LatLng(28, 5));
+            map.setCenter(new google.maps.LatLng(28, 5));  
         });
 
         function initialize() {
+            map = document.getElementById('map-canvas');
+            var input = document.getElementById('txtAutocomplete');
 
             //Map initializer
             var mapOptions = {
                 center: { lat: 0, lng: 0 },
                 zoom: 2
             };
-            map = new google.maps.Map(document.getElementById('map-canvas'),
+            map = new google.maps.Map(map,
                 mapOptions);
 
             google.maps.event.addListener(map, 'click', function (event) {
@@ -142,13 +148,22 @@
                 marker = new google.maps.Marker({ position: event.latLng, map: map });
             });
 
-            //Autocoplete initializer
-            autocomplete = new google.maps.places.Autocomplete((document.getElementById('autocomplete')),
-                { types: ['geocode'] });
+            //Autocomplete initializer
+
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', map);
 
             google.maps.event.addListener(autocomplete, 'place_changed', function () {
-                var place = autocomplete.getPlace();
-                console.log(place);
+                if (marker)
+                    marker.setMap(null);
+                var location = autocomplete.getPlace().geometry.location;
+                lat = location.A;
+                lng = location.F;
+                map.panTo(location);
+                map.setZoom(17);
+                marker = new google.maps.Marker({ position: location, map: map });
             });
         }
 

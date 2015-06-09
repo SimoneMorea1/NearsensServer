@@ -26,3 +26,7 @@ textarea {
 .input-error {
     border:1px solid #db2a2a;
 }
+
+div.pac-container {
+   z-index: 1051 !important;
+}
