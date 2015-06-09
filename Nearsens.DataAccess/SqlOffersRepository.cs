@@ -40,7 +40,9 @@ SELECT  id ,
 		icon ,
 		expiration_date ,
 		start_date ,
-        title
+        title ,
+        price ,
+        discount
 FROM    dbo.offers
 WHERE id_place = @id
 ";
@@ -59,6 +61,8 @@ WHERE id_place = @id
                             offer.Title = (string)reader["title"];
                             offer.ExpirationDate = (DateTime)reader["expiration_date"];
                             offer.StartDate = (DateTime)reader["start_date"];
+                            offer.Price = (Decimal)reader["price"];
+                            offer.Discount = (int)reader["discount"];
                             offer.Icon = reader["icon"] == DBNull.Value ? (string)null : (string)reader["icon"];
                            
                             offers.Add(offer);

@@ -13,5 +13,7 @@ namespace Nearsens.Models
         public DateTime StartDate { get; set; }
         public DateTime ExpirationDate { get; set; }
         public string Icon { get; set; }
+        public decimal Price { get; set; }
+        public int Discount { get; set; }
     }
 }
