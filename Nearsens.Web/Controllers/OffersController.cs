@@ -33,11 +33,6 @@ namespace Nearsens.Web.Controllers
             return repository.GetOfferById(id);
         }
 
-        public IEnumerable<GetOffersByPlaceIdQuery> GetOffersByPlaceId(long placeId)
-        {
-            return repository.GetOffersByPlaceId(placeId, true);
-        }
-
         // POST: api/Offers
         public long Post([FromBody]Offer offer)
         {

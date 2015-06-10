@@ -10,7 +10,6 @@ using System.Web;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Nearsens.DataAccess;
-using Nearsens.Web.App_Code;
 
 namespace Nearsens.Web.Controllers
 {
@@ -108,6 +107,8 @@ namespace Nearsens.Web.Controllers
                 throw new HttpResponseException(response);
             }
         }
+       
+
 
         [Authorize]
         [HttpPost]
@@ -140,14 +141,7 @@ namespace Nearsens.Web.Controllers
 
             MyStreamProvider streamProvider = new MyStreamProvider(uploadPath);
 
-            try
-            {
-                await Request.Content.ReadAsMultipartAsync(streamProvider);
-            }
-            catch (Exception e)
-            {
-                ExceptionUtility.LogException(e, "FileUploadController");
-            }
+            await Request.Content.ReadAsMultipartAsync(streamProvider);
 
             List<string> messages = new List<string>();
             foreach (var file in streamProvider.FileData)
