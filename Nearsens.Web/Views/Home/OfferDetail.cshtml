@@ -1,31 +1,75 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "OfferDetail";
     var currentOffer = Model.offerDetail;
 }
 <br />
 
-<form id="updateOfferForm">
+<div class="col-lg-5">
+    <form id="updateOfferForm">
 
-    <p>Title</p>
-    <input class="form-control" id="txtTitle" type="text" value="@currentOffer.Title" required />
-    <p>Description</p>
-    <textarea class="form-control" id="txtDescription" required>@currentOffer.Description</textarea>
-    <p>Price</p>
-    <input class="form-control" id="txtPrice" type="number" value="@currentOffer.Price.ToString().Replace(",", ".")" step="any" required />
-    <p>Discount (%)</p>
-    <input class="form-control" id="txtDiscount" type="number" max="100" min="1" value="@currentOffer.Discount" required />
-    <p>Start Date</p>
-    <input class="form-control datePicker" id="txtStartDate" type="date" value="@String.Format("{0:yyyy-MM-dd}", currentOffer.StartDate)" required />
-    <p>Expiration Date</p>
-    <input class="form-control datePicker" id="txtExpirationDate" type="date" value="@String.Format("{0:yyyy-MM-dd}", currentOffer.ExpirationDate)" required />
-    <label id="lblError" style="display: none; color: red"> The expiration date must be after the start date </label>
-    <br />
-    <input class="btn btn-group" id="btnUpdateOffer" type="submit" value="Update" />
-</form>
+        <p>Title</p>
+        <input class="form-control" id="txtTitle" type="text" value="@currentOffer.Title" required />
+        <p>Description</p>
+        <textarea class="form-control" id="txtDescription" required>@currentOffer.Description</textarea>
+        <p>Price</p>
+        <input class="form-control checkPrice" id="txtPrice" type="number" value="@currentOffer.Price.ToString().Replace(",", ".")" step="any" required />
+        <p>Discount (%)</p>
+        <input class="form-control checkPrice" id="txtDiscount" type="number" max="100" min="1" value="@currentOffer.Discount" required />
+        <label id="lblFinalPrice" style="display: none; color: green"> Final price: </label>
+        <p>Start Date</p>
+        <input class="form-control datePicker" id="txtStartDate" type="date" value="@String.Format("{0:yyyy-MM-dd}", currentOffer.StartDate)" required />
+        <p>Expiration Date</p>
+        <input class="form-control datePicker" id="txtExpirationDate" type="date" value="@String.Format("{0:yyyy-MM-dd}", currentOffer.ExpirationDate)" required />
+        <label id="lblError" style="display: none; color: red"> The expiration date must be after the start date </label>
+        <br />
+        <p>Main photo</p>
+
+        <img src="\@currentOffer.MainPhoto" id="imgMainPhoto" style="width:300px">
+
+        <br />
+        <br />
+        <div class="modal-body" style="display:none">
+
+            <label class="label label-info col-lg-12" for="mainPhoto">Main photo</label>
+            <br />
+            <input type="file" id="mainPhoto" class="form-control col-lg-10" /> <input id="btnUploadMainPhoto" type="button" class="btn btn-success btn-sm col-lg-2" value="Upload" />
+            <br style="clear:both" />
+
+        </div>
+        <input class="btn btn-group" id="btnDeleteMainPhoto" type="button" value="Delete Main photo" />
+
+        <input class="btn btn-group" id="btnUpdateOffer" type="submit" value="Update" />
+    </form>
+</div>
+
+<div class="col-lg-4">
+    <a href="@Url.Action("offerPhotos/" + currentOffer.Id, "Home")">
+         <button type="submit" style="margin-top:50%;width:200px;font-size:15px" class="btn btn-default"><span class="glyphicon glyphicon-camera" style="font-size:20px;"></span> MANAGE PHOTOS</button>
+    </a>
+</div>
 
 @section scripts {
     <script type="text/javascript">
+
+        var newOfferId = @currentOffer.Id;
+        $(function() {
+
+            var price = $('#txtPrice').val();
+            var discount = $('#txtDiscount').val();
+
+            calculateFinalPrice(price,discount);
+        });
+
+
+        $('#btnUploadMainPhoto').on('click', function () {
+
+            var files = $("#mainPhoto").get(0).files;
+            if (files.length > 0) {
+                var mainPhoto = new FormData();
+                mainPhoto.append("file0", files[0]);
+                uploadMainPhoto(mainPhoto);
+            }
+        });
 
         $('#updateOfferForm').on('submit', function (e) {
             e.preventDefault();
@@ -58,13 +102,17 @@
             });
         });
 
+        $('#btnDeleteMainPhoto').on('click', function() {
+            $('#imgMainPhoto').fadeOut();
+            $('.modal-body').fadeIn();
+        });
+
         $('#txtExpirationDate').on('change', function() {
-            
+
             var startDate = new Date($('#txtStartDate').val());
             var expirationDate = new Date($('#txtExpirationDate').val());
 
             if (expirationDate < startDate){
-                $(this).blur(); 
                 $(this).addClass('input-error');
                 $('#lblError').show();
             }
@@ -72,15 +120,16 @@
                 $('.datePicker').removeClass('input-error');
                 $('#lblError').hide();
             }
-  
+
         });
+
+
         $('#txtStartDate').on('change', function() {
-            
+
             var startDate = new Date($('#txtStartDate').val());
             var expirationDate = new Date($('#txtExpirationDate').val());
 
             if (expirationDate < startDate){
-                $(this).blur(); 
                 $(this).addClass('input-error');
                 $('#lblError').show();
             }
@@ -88,8 +137,48 @@
                 $('.datePicker').removeClass('input-error');
                 $('#lblError').hide();
             }
-  
+
         });
 
-</script>
+        $('.checkPrice').on('keyup', function() {
+
+
+            var price = $('#txtPrice').val();
+            var discount = $('#txtDiscount').val();
+
+            calculateFinalPrice(price,discount);
+
+        });
+
+        function uploadMainPhoto(mainPhoto) {
+            $.ajax({
+                type: "POST",
+                url: "/api/FileUpload/UploadOfferMainPhoto?offerId=" + newOfferId + "&placeId=" + @currentOffer.IdPlace,
+                contentType: false,
+                processData: false,
+                data: mainPhoto,
+                success: function (messages) {
+                    alert('Photo uploaded');
+                },
+                error: function (error) {
+                    alert("Upload failed");
+                }
+            });
+        }
+        function calculateFinalPrice(price,discount){
+
+            if(parseInt(discount) > 0 && parseInt(price ) > 0){
+
+                var finalPrice = price - (price * discount)/100;
+                $('#lblFinalPrice').html('Final price: '+finalPrice+'€');
+                $('#lblFinalPrice').fadeIn();
+            }
+            else{
+                $('#lblFinalPrice').fadeOut();
+            }
+
+        }
+
+
+    </script>
 }

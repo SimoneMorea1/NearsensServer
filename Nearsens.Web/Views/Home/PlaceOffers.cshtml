@@ -51,11 +51,14 @@
                     
                 
 
-                    <input type="date" id="txtStartDate" class="form-control" placeholder="Start date" required />
-                    <input type="date" id="txtExpirationDate" class="form-control" placeholder="Expiration date" required />
+                    <input type="date" id="txtStartDate" class="form-control datePicker" placeholder="Start date" required />
+                    <input type="date" id="txtExpirationDate" class="form-control datePicker" placeholder="Expiration date" required />
+                    <label id="lblError" style="display: none; color: red"> The expiration date must be after the start date </label>
 
-                    <input type="number" id="txtPrice" class="form-control" placeholder="Price" step="any" required />
-                    <input type="number" id="txtDiscount" class="form-control" placeholder="Discount" max="100" min="1" required />
+                    <input type="number" id="txtPrice" class="form-control checkPrice" placeholder="Price" step="any" required />
+                    <input type="number" id="txtDiscount" class="form-control checkPrice" placeholder="Discount" max="100" min="1" required />
+                    <label id="lblFinalPrice" style="display: none; color: green"> Final price: </label>
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Add</button>
@@ -98,7 +101,50 @@
 @section scripts {
     <script type="text/javascript">
 
-    var newOfferId;
+        var newOfferId;
+        
+        $('#txtExpirationDate').on('change', function() {
+            
+            var startDate = new Date($('#txtStartDate').val());
+            var expirationDate = new Date($('#txtExpirationDate').val());
+
+            if (expirationDate < startDate){
+                $(this).addClass('input-error');
+                $('#lblError').show();
+            }
+            else {
+                $('.datePicker').removeClass('input-error');
+                $('#lblError').hide();
+            }
+  
+        });
+
+        
+        $('#txtStartDate').on('change', function() {
+            
+            var startDate = new Date($('#txtStartDate').val());
+            var expirationDate = new Date($('#txtExpirationDate').val());
+
+            if (expirationDate < startDate){
+                $(this).addClass('input-error');
+                $('#lblError').show();
+            }
+            else {
+                $('.datePicker').removeClass('input-error');
+                $('#lblError').hide();
+            }
+  
+        });
+
+        $('.checkPrice').on('keyup', function() {
+            
+            var price = $('#txtPrice').val();
+            var discount = $('#txtDiscount').val();
+
+            calculateFinalPrice(price,discount);
+
+        });
+
 
     $('#newOfferForm').on('submit', function (e) {
         e.preventDefault();
@@ -183,6 +229,20 @@
     $('#btnDone').on('click', function () {
         location.reload();
     });
+    
+    function calculateFinalPrice(price,discount){
+            
+        if(parseInt(discount) > 0 && parseInt(price ) > 0){
+
+            var finalPrice = price - (price * discount)/100;
+            $('#lblFinalPrice').html('Final price: '+finalPrice+'€');
+            $('#lblFinalPrice').fadeIn();
+        } 
+        else{
+            $('#lblFinalPrice').fadeOut();
+        }
+
+    }
 
     function uploadIcon(icon) {
         $.ajax({
