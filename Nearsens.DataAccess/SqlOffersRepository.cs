@@ -27,7 +27,7 @@ namespace Nearsens.DataAccess
                 throw new ApplicationException(string.Format("ConnectionString '{0}' not found", connectionStringName));
             connectionString = cs.ConnectionString;
         }
-        public IEnumerable<GetOffersByPlaceIdQuery> GetOffersByPlaceId(long id)
+        public IEnumerable<GetOffersByPlaceIdQuery> GetOffersByPlaceId(long id, bool onlyValidOffers)
         {
             List<GetOffersByPlaceIdQuery> offers = new List<GetOffersByPlaceIdQuery>();
 
@@ -40,10 +40,14 @@ SELECT  id ,
 		icon ,
 		expiration_date ,
 		start_date ,
-        title
+        title ,
+        price ,
+        discount
 FROM    dbo.offers
 WHERE id_place = @id
 ";
+                if (onlyValidOffers)
+                    query += " AND CAST(GETDATE() as DATE) BETWEEN start_date AND expiration_date";
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.Add(new SqlParameter("@id", id));
@@ -57,6 +61,8 @@ WHERE id_place = @id
                             offer.Title = (string)reader["title"];
                             offer.ExpirationDate = (DateTime)reader["expiration_date"];
                             offer.StartDate = (DateTime)reader["start_date"];
+                            offer.Price = (Decimal)reader["price"];
+                            offer.Discount = (int)reader["discount"];
                             offer.Icon = reader["icon"] == DBNull.Value ? (string)null : (string)reader["icon"];
                            
                             offers.Add(offer);
@@ -85,7 +91,7 @@ SELECT  dbo.offers.id ,
         lat ,
         lng
 FROM    dbo.offers, dbo.places
-WHERE dbo.offers.id_place = dbo.places.id
+WHERE dbo.offers.id_place = dbo.places.id  AND CAST(GETDATE() as DATE) BETWEEN start_date AND expiration_date
 ";
                 query = BuildWhereClause(query, category, subcategory);
                 using (var command = new SqlCommand(query, connection))
@@ -137,7 +143,6 @@ SELECT  id ,
 		price ,
 		discount ,
         main_photo ,
-        id_place,
         link
       
 FROM    dbo.offers
@@ -157,55 +162,17 @@ WHERE id = @id
                             offer.ExpirationDate = (DateTime)reader["expiration_date"];
                             offer.Price = (decimal)reader["price"];
                             offer.Discount = (int)reader["discount"];
-                            offer.IdPlace = (long)reader["id_place"];
                             offer.MainPhoto = reader["main_photo"] == DBNull.Value ? (string)null : (string)reader["main_photo"];
                             offer.Link = reader["link"] == DBNull.Value ? (string)null : (string)reader["link"];
                         }
                     }
                 }
             }
-            offer.Photos = GetOfferPathPhotos(id);
+            offer.Photos = GetOfferPhotos(id);
             return offer;
         }
 
-        public IEnumerable<Photo> GetOfferPhotos(long id)
-        {
-            List<Photo> photos = new List<Photo>();
-
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                string query = @"
-
-SELECT  id,
-        photo 
-    
-FROM    dbo.photos_offers
-WHERE id_offer = @id
-";
-                using (var command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.Add(new SqlParameter("@id", id));
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Photo photo = new Photo();
-
-                            photo.Id = (long)reader["id"];
-                            photo.Path = (string)reader["photo"];
-
-                            photos.Add(photo);
-                        }
-                    }
-                }
-            }
-            return photos;
-        }
-
-
-        public IEnumerable<string> GetOfferPathPhotos(long id)
+        public IEnumerable<string> GetOfferPhotos(long id)
         {
             List<string> photos = new List<string>();
             using (var connection = new SqlConnection(connectionString))
@@ -233,32 +200,6 @@ WHERE id_offer = @id
                 }
             }
             return photos;
-        }
-        public void DeletePhotos(int[] listaId)
-        {
-     
-            for( int i = 0 ; i < listaId.Length; i++){
-
-                DeletePhoto(listaId[i]);
-            }
-        }
-        public void DeletePhoto(int id)
-        {
-
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                string query = @"
-DELETE FROM [dbo].[photos_offers]
- WHERE id = @id";
-                using (var command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.Add(new SqlParameter("@id", id));
-
-                    int count = command.ExecuteNonQuery();
-                }
-            }
         }
 
         public long InsertOffer(Offer offer)

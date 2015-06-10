@@ -26,13 +26,7 @@ textarea {
 .input-error {
     border:1px solid #db2a2a;
 }
-.imgPhotoOffer{
-    width:20%;
-    float:left;
-}
-.imgPhotoOffer img{
-    width:90%;
-}
-.selezionato{
-    opacity:0.5;
+
+div.pac-container {
+   z-index: 1051 !important;
 }

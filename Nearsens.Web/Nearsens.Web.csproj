@@ -186,7 +186,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OffersController.cs" />
-    <Compile Include="Controllers\PhotosController.cs" />
     <Compile Include="Controllers\PlacesController.cs" />
     <Compile Include="Controllers\SubcategoriesController.cs" />
     <Compile Include="Global.asax.cs">
