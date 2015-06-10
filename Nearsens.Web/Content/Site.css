@@ -36,3 +36,7 @@ textarea {
 .selezionato{
     opacity:0.5;
 }
+
+div.pac-container {
+   z-index: 1051 !important;
+}

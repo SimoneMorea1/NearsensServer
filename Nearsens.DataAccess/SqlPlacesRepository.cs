@@ -167,15 +167,16 @@ WHERE user_id = @id
                 connection.Open();
 
                 string query = @"
-SELECT  id ,
+SELECT  dbo.places.id ,
 		name ,
 		main_category ,
 		subcategory ,
 		lat ,
 		lng ,
-        icon
+        dbo.places.icon
       
-FROM    dbo.places
+FROM    dbo.places, dbo.offers
+WHERE   dbo.places.id = dbo.offers.id_place AND CAST(GETDATE() as DATE) BETWEEN start_date AND expiration_date
 ";
                 query = BuildWhereClause(query, category, subcategory);
                 using (var command = new SqlCommand(query, connection))

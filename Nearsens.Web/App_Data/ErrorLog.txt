@@ -1,0 +1,7 @@
+********** 05/06/2015 13:17:53 **********
+Exception Type: System.DivideByZeroException
+Exception: Tentativo di divisione per zero.
+Source: FileUploadController
+Stack Trace: 
+   in Nearsens.Web.Controllers.FileUploadController.<DoSomething>d__27.MoveNext() in c:\Users\ITS\Documents\Visual Studio 2013\Projects\Nearsens\Nearsens.Web\Controllers\FileUploadController.cs:riga 146
+
