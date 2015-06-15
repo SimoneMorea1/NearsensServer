@@ -16,6 +16,8 @@
         <p>Discount (%)</p>
         <input class="form-control checkPrice" id="txtDiscount" type="number" max="100" min="1" value="@currentOffer.Discount" required />
         <label id="lblFinalPrice" style="display: none; color: green"> Final price: </label>
+        <p>Link</p>
+        <input class="form-control" id="txtLink" type="url" value="@currentOffer.Link" />
         <p>Start Date</p>
         <input class="form-control datePicker" id="txtStartDate" type="date" value="@String.Format("{0:yyyy-MM-dd}", currentOffer.StartDate)" required />
         <p>Expiration Date</p>
@@ -84,6 +86,7 @@
             offer.ExpirationDate = $('#txtExpirationDate').val();
             offer.Price = $('#txtPrice').val().replace(",", ".");
             offer.Discount = $('#txtDiscount').val();
+            offer.Link = $('#txtLink').val();
             offer.Id = @currentOffer.Id;
 
             $.ajax({

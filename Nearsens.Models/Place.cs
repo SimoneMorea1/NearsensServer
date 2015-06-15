@@ -17,5 +17,6 @@ namespace Nearsens.Models
         public double Lng { get; set; }
         public string UserId { get; set; }
         public string Icon { get; set; }
+        public string Address { get; set; }
     }
 }

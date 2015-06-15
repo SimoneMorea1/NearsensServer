@@ -171,8 +171,9 @@
             place.Description = $('#txtDescription').val();
             place.MainCategory = $('#slctCategory').val();
             place.Subcategory = $('#slctSubcategory').val();
-            place.Lat = $('#txtLat').val().replace(",", ".");
-            place.Lng = $('#txtLng').val().replace(",", ".");
+            place.Lat = lat;
+            place.Lng = lng;
+            place.Address = $('#txtAutocomplete').val();
 
             $.ajax({
                 url: '/api/Places',

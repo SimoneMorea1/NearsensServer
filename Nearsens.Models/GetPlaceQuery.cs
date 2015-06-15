@@ -16,6 +16,7 @@ namespace Nearsens.Models
         public double Lat { get; set; }
         public double Lng { get; set; }
         public string Icon { get; set; }
+        public string Address { get; set; }
         public IEnumerable<string> Photos { get; set; }
     }
 }

@@ -41,7 +41,8 @@ SELECT  id ,
 		subcategory ,
 		lat ,
 		lng ,
-        icon
+        icon ,
+        address
       
 FROM    dbo.places
 WHERE id = @id
@@ -60,6 +61,7 @@ WHERE id = @id
                             place.Subcategory = (string)reader["subcategory"];
                             place.Lat = (double)reader["lat"];
                             place.Lng = (double)reader["lng"];
+                            place.Address = (string)reader["address"];
                             place.Icon = reader["icon"] == DBNull.Value ? (string)null : (string)reader["icon"];
 
                         }
@@ -222,6 +224,7 @@ INSERT INTO [dbo].[places]
 		   ,[lng]
            ,[main_category]
            ,[subcategory]
+           ,[address]
            ,[user_id])
     OUTPUT INSERTED.ID
 	 VALUES
@@ -231,6 +234,7 @@ INSERT INTO [dbo].[places]
 		   ,@lng
 		   ,@main_category
            ,@subcategory
+           ,@address
            ,@user_id)";
                 using (var command = new SqlCommand(query, connection))
                 {
@@ -240,6 +244,7 @@ INSERT INTO [dbo].[places]
                     command.Parameters.Add(new SqlParameter("@lng", place.Lng));
                     command.Parameters.Add(new SqlParameter("@main_category", place.MainCategory));
                     command.Parameters.Add(new SqlParameter("@subcategory", place.Subcategory));
+                    command.Parameters.Add(new SqlParameter("@address", place.Address));
                     command.Parameters.Add(new SqlParameter("@user_id", place.UserId));
 
                     return (long) command.ExecuteScalar();

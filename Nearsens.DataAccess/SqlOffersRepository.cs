@@ -281,6 +281,7 @@ INSERT INTO [dbo].[offers]
 		   ,[expiration_date]
            ,[price]
            ,[discount]
+           ,[link]
            ,[id_place])
     OUTPUT INSERTED.ID
 	 VALUES
@@ -290,6 +291,7 @@ INSERT INTO [dbo].[offers]
 		   ,@expiration_date
 		   ,@price
            ,@discount
+           ,@link
            ,@id_place)";
                 using (var command = new SqlCommand(query, connection))
                 {
@@ -300,6 +302,7 @@ INSERT INTO [dbo].[offers]
                     command.Parameters.Add(new SqlParameter("@price", offer.Price));
                     command.Parameters.Add(new SqlParameter("@discount", offer.Discount));
                     command.Parameters.Add(new SqlParameter("@id_place", offer.IdPlace));
+                    command.Parameters.Add(new SqlParameter("@link", offer.Link));
 
                     return (long) command.ExecuteScalar();
                 }
@@ -427,6 +430,7 @@ UPDATE [dbo].[offers]
 	  ,[discount] = @discount
 	  ,[start_date] = @start_date
 	  ,[expiration_date] = @expiration_date
+      ,[link] = @link
  WHERE id = @id
 ";
                 using (var command = new SqlCommand(query, connection))
@@ -438,6 +442,7 @@ UPDATE [dbo].[offers]
                     command.Parameters.Add(new SqlParameter("@discount", offer.Discount));
                     command.Parameters.Add(new SqlParameter("@start_date", offer.StartDate));
                     command.Parameters.Add(new SqlParameter("@expiration_date", offer.ExpirationDate));
+                    command.Parameters.Add(new SqlParameter("@link", offer.Link));
                     int count = command.ExecuteNonQuery();
                 }
             }
