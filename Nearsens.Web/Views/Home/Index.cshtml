@@ -64,8 +64,8 @@
 
                     <br style="clear:both" />
 
-                    <input type="text" id="txtAutocomplete" class="form-control" placeholder="Insert address" />
-                    <div id="map-canvas" style="height: 500px; width:500px; margin: 0; padding: 0;"></div>
+                    <input type="text" id="txtAutocompleteAddress" class="form-control" placeholder="Insert address" required />
+                    <div id="map-canvas"></div>
 
                 </div>
                 <div class="modal-footer">
@@ -106,10 +106,8 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false"></script>
 
-
     <script type="text/javascript">
 
-        var newPlaceId;
         var newPlaceId;
         var map;
         var lat, lng;
@@ -126,7 +124,7 @@
 
         function initialize() {
             map = document.getElementById('map-canvas');
-            var input = document.getElementById('txtAutocomplete');
+            var input = document.getElementById('txtAutocompleteAddress');
 
             //Map initializer
             var mapOptions = {
@@ -136,13 +134,7 @@
             map = new google.maps.Map(map,
                 mapOptions);
 
-            google.maps.event.addListener(map, 'click', function (event) {
-                if (marker)
-                    marker.setMap(null);
-                lat = event.latLng.A;
-                lng = event.latLng.F;
-                marker = new google.maps.Marker({ position: event.latLng, map: map });
-            });
+           
 
             //Autocomplete initializer
 
@@ -160,6 +152,18 @@
                 map.panTo(location);
                 map.setZoom(17);
                 marker = new google.maps.Marker({ position: location, map: map });
+
+                addMapClickListener();
+            });
+        }
+
+        function addMapClickListener() {
+            google.maps.event.addListener(map, 'click', function (event) {
+                if (marker)
+                    marker.setMap(null);
+                lat = event.latLng.A;
+                lng = event.latLng.F;
+                marker = new google.maps.Marker({ position: event.latLng, map: map });
             });
         }
 
@@ -173,7 +177,7 @@
             place.Subcategory = $('#slctSubcategory').val();
             place.Lat = lat;
             place.Lng = lng;
-            place.Address = $('#txtAutocomplete').val();
+            place.Address = $('#txtAutocompleteAddress').val();
 
             $.ajax({
                 url: '/api/Places',

@@ -40,3 +40,10 @@ textarea {
 div.pac-container {
    z-index: 1051 !important;
 }
+
+#map-canvas {
+    height: 500px;
+    width:500px;
+    margin: 0;
+    padding: 0;
+}

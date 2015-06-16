@@ -336,6 +336,7 @@ UPDATE [dbo].[places]
 	  ,[lat] = @lat
 	  ,[lng] = @lng
 	  ,[icon] = @icon
+      ,[address] = @address
  WHERE id = @id
 ";
                 using (var command = new SqlCommand(query, connection))
@@ -348,6 +349,7 @@ UPDATE [dbo].[places]
                     command.Parameters.Add(new SqlParameter("@lat", (object)place.Lat ?? DBNull.Value));
                     command.Parameters.Add(new SqlParameter("@lng", (object)place.Lng ?? DBNull.Value));
                     command.Parameters.Add(new SqlParameter("@icon", (object)place.Icon ?? DBNull.Value));
+                    command.Parameters.Add(new SqlParameter("@address", place.Address));
                     int count = command.ExecuteNonQuery();
                 }
             }
