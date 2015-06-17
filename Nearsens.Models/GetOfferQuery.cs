@@ -17,8 +17,8 @@ namespace Nearsens.Models
         public int Discount { get; set; }
         public string Title { get; set; }
         public string MainPhoto { get; set; }
-
         public long IdPlace { get; set; }
+        public string PlaceAddress { get; set; }
         public IEnumerable<string> Photos { get; set; }
     }
 }

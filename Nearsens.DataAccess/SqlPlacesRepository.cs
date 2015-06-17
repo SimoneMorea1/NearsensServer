@@ -68,7 +68,7 @@ WHERE id = @id
                     }
                 }
             }
-            //place.Photos = GetPlacePhotos(id);
+            place.Photos = GetPlacePhotosPath(id);
             return place;
         }
 
@@ -101,6 +101,37 @@ WHERE id_place = @id
                             photo.IdPlace = (long)reader["id_place"];
                              
                             photos.Add(photo);
+                        }
+                    }
+                }
+            }
+            return photos;
+        }
+
+        public IEnumerable<string> GetPlacePhotosPath(long id)
+        {
+            List<string> photos = new List<string>();
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = @"
+SELECT  photo 
+      
+FROM    dbo.photos
+WHERE id_place = @id
+";
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.Add(new SqlParameter("@id", id));
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var path = (string)reader["photo"];
+
+                            photos.Add(path);
                         }
                     }
                 }
@@ -176,7 +207,7 @@ WHERE user_id = @id
                 connection.Open();
 
                 string query = @"
-SELECT  dbo.places.id ,
+SELECT DISTINCT  dbo.places.id ,
 		name ,
 		main_category ,
 		subcategory ,
@@ -194,6 +225,7 @@ WHERE   dbo.places.id = dbo.offers.id_place AND CAST(GETDATE() as DATE) BETWEEN 
                     if (subcategory != null) command.Parameters.Add(new SqlParameter("@subcategory", subcategory));
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
+                        SqlOffersRepository offersRepo = new SqlOffersRepository();
                         while (reader.Read())
                         {
                             GetNearestPlacesQuery place = new GetNearestPlacesQuery();
@@ -204,6 +236,8 @@ WHERE   dbo.places.id = dbo.offers.id_place AND CAST(GETDATE() as DATE) BETWEEN 
                             place.Lat = (double)reader["lat"];
                             place.Lng = (double)reader["lng"];
                             place.Icon = reader["icon"] == DBNull.Value ? (string)null : (string)reader["icon"];
+
+                            place.FirstOffer = offersRepo.GetFirstOfferByPlaceId(place.Id);
 
                             places.Add(place);
                         }
@@ -382,7 +416,6 @@ UPDATE [dbo].[places]
                     command.Parameters.Add(new SqlParameter("@subcategory", (object)place.Subcategory ?? DBNull.Value));
                     command.Parameters.Add(new SqlParameter("@lat", (object)place.Lat ?? DBNull.Value));
                     command.Parameters.Add(new SqlParameter("@lng", (object)place.Lng ?? DBNull.Value));
-                    command.Parameters.Add(new SqlParameter("@icon", (object)place.Icon ?? DBNull.Value));
                     command.Parameters.Add(new SqlParameter("@address", place.Address));
                     int count = command.ExecuteNonQuery();
                 }

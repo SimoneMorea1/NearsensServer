@@ -135,19 +135,20 @@ WHERE dbo.offers.id_place = dbo.places.id  AND CAST(GETDATE() as DATE) BETWEEN s
                 connection.Open();
 
                 string query = @"
-SELECT  id ,
+SELECT  dbo.offers.id ,
 		title ,
-        description ,
+        dbo.offers.description ,
 		start_date ,
 		expiration_date ,
 		price ,
 		discount ,
         main_photo ,
-        id_place,
-        link
+        id_place ,
+        link ,
+        address
       
-FROM    dbo.offers
-WHERE id = @id
+FROM    dbo.offers, dbo.places
+WHERE dbo.offers.id = @id AND dbo.offers.id_place = dbo.places.id
 ";
                 using (var command = new SqlCommand(query, connection))
                 {
@@ -164,6 +165,7 @@ WHERE id = @id
                             offer.Price = (decimal)reader["price"];
                             offer.Discount = (int)reader["discount"];
                             offer.IdPlace = (long)reader["id_place"];
+                            offer.PlaceAddress = (string)reader["address"];
                             offer.MainPhoto = reader["main_photo"] == DBNull.Value ? (string)null : (string)reader["main_photo"];
                             offer.Link = reader["link"] == DBNull.Value ? (string)null : (string)reader["link"];
                         }
@@ -471,6 +473,43 @@ UPDATE [dbo].[offers]
             }
 
             return query.Remove(query.LastIndexOf(","));
+        }
+
+        internal OfferForNearestPlacesQuery GetFirstOfferByPlaceId(long id)
+        {
+            OfferForNearestPlacesQuery offer = new OfferForNearestPlacesQuery();
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = @"
+SELECT TOP 1 id ,
+		title ,
+		description ,
+		main_photo ,
+        price ,
+        discount
+FROM    dbo.offers
+WHERE id_place = @id AND CAST(GETDATE() as DATE) BETWEEN start_date AND expiration_date
+";
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.Add(new SqlParameter("@id", id));
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            offer.Id = (long)reader["id"];
+                            offer.Title = (string)reader["title"];
+                            offer.Description = (string)reader["description"];
+                            offer.Price = (decimal)reader["price"];
+                            offer.Discount = (int)reader["discount"];
+                            offer.MainPhoto = reader["main_photo"] == DBNull.Value ? (string)null : (string)reader["main_photo"];
+                        }
+                    }
+                }
+            }
+            return offer;
         }
     }
 }
