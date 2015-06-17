@@ -1,18 +1,18 @@
 ﻿
 @{
-    ViewBag.Title = "OfferPhotos";
-
-    var currentOffer = Model.offerDetail;
+    ViewBag.Title = "PlacePhotos";
+    long placeId = 0;
 }
 
 <h2>Manage Photos</h2>
 <p>Select the photo that you would like to delete and the click on the button "DELETE PHOTO"</p>
 @{
-    
-    foreach (Nearsens.Models.OfferPhoto photo in Model.offerPhotosList)
-        {
 
-        <div class="imgPhotoOffer">
+    foreach (Nearsens.Models.Photo photo in Model.placePhotos)
+    {
+        placeId = @photo.IdPlace;
+                 
+        <div class="imgPlacePhoto">
             <img src="\@photo.Path" data-id="@photo.Id" />
         </div>
     }
@@ -25,9 +25,9 @@
 <br />
 <div class="col-lg-12" style="clear:both;padding-top:30px;">
     <label class="label label-info col-lg-12" for="photos">Add Photos</label>
-<br />
-<input type="file" id="photos" class="form-control col-lg-10" multiple /> <input id="btnUploadPhotos" type="button" class="btn btn-success btn-sm col-lg-2" value="Upload" />
-   </div>
+    <br />
+    <input type="file" id="photos" class="form-control col-lg-10" multiple /> <input id="btnUploadPhotos" type="button" class="btn btn-success btn-sm col-lg-2" value="Upload" />
+</div>
 
 @section scripts{
 
@@ -35,14 +35,14 @@
 
         var listaId = new Array();
         var arrayIndex = 0;
-        $('.imgPhotoOffer').on('click', function () {
+        $('.imgPlacePhoto').on('click', function () {
 
             if($(this).hasClass('selezionato')){
-                
+
                 $(this).removeClass('selezionato');
             }
             else{
-                
+
                 $(this).addClass('selezionato');
             }
         });
@@ -58,7 +58,7 @@
 
 
             $.ajax({
-                url: '/api/OfferPhotos/',
+                url: '/api/Photos/',
                 type: 'DELETE',
                 contentType: 'application/json',
                 dataType: 'json',
@@ -86,10 +86,10 @@
         });
 
         function uploadPhotos(photos) {
-          
+
             $.ajax({
                 type: "POST",
-                url: "/api/FileUpload/UploadOfferPhotos?offerId=" + @currentOffer.Id + "&placeId=" + @currentOffer.IdPlace,
+                url: "/api/FileUpload/UploadPlacePhotos?placeId="+@placeId,
                 contentType: false,
                 processData: false,
                 data: photos,
@@ -103,5 +103,5 @@
             });
         }
 
-</script>
+    </script>
 }

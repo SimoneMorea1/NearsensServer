@@ -48,8 +48,26 @@
                         }
                     }
                 }
+<<<<<<< HEAD
             </select>
             <br />
+            <input class="btn btn-group" id="btnUpdatePlace" type="submit" value="Update" />
+
+
+    </div>
+
+    <div class="col-lg-6">
+
+        <input type="text" id="txtAutocompleteAddress" class="form-control" placeholder="Insert address" value="@currentPlace.Address" required />
+        <div id="map-canvas"></div>
+
+    </div>
+
+=======
+            }
+        }
+    </select>
+    <br />
     <br />
     <p>Main photo</p>
 
@@ -67,18 +85,8 @@
     </div>
     <input class="btn btn-group" id="btnDeleteMainPhoto" type="button" value="Delete Main photo" />
 
-            <input class="btn btn-group" id="btnUpdatePlace" type="submit" value="Update" />
-
-
-    </div>
-
-    <div class="col-lg-6">
-
-        <input type="text" id="txtAutocompleteAddress" class="form-control" placeholder="Insert address" value="@currentPlace.Address" required />
-        <div id="map-canvas"></div>
-
-    </div>
-
+    <input class="btn btn-group" id="btnUpdatePlace" type="submit" value="Update" />
+>>>>>>> origin/master
 </form>
 <div class="col-lg-4">
     <a href="@Url.Action("placePhotos/" + currentPlace.Id, "Home")">
@@ -91,6 +99,7 @@
 
     <script type="text/javascript">
 
+<<<<<<< HEAD
         var map;
         var lat = parseFloat(@currentPlace.Lat.ToString().Replace(",", "."));
         var lng = parseFloat(@currentPlace.Lng.ToString().Replace(",", "."));
@@ -144,6 +153,8 @@
             });
         }
 
+=======
+>>>>>>> origin/master
         $('#placeDetailForm').on('submit', function (e) {
             e.preventDefault();
 
@@ -176,6 +187,9 @@
                 }
             });
         });
+<<<<<<< HEAD
+</script>
+=======
 
 
     var newPlaceId = @currentPlace.Id;
@@ -218,5 +232,6 @@
 
 </script>
 
+>>>>>>> origin/master
 }
 

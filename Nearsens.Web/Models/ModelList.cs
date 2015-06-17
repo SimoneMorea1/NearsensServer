@@ -14,6 +14,7 @@ namespace Nearsens.Web.Models
         public IEnumerable<GetOffersByPlaceIdQuery> offersByPlace;
         public GetOfferQuery offerDetail;
         public IEnumerable<string> subcategories;
-        public IEnumerable<Photo> offerPhotosList;
+        public IEnumerable<OfferPhoto> offerPhotosList;
+        public IEnumerable<Photo> placePhotos;
     }
 }

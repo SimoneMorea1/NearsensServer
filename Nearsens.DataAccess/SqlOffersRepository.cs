@@ -174,9 +174,9 @@ WHERE id = @id
             return offer;
         }
 
-        public IEnumerable<Photo> GetOfferPhotos(long id)
+        public IEnumerable<OfferPhoto> GetOfferPhotos(long id)
         {
-            List<Photo> photos = new List<Photo>();
+            List<OfferPhoto> offerPhotos = new List<OfferPhoto>();
 
             using (var connection = new SqlConnection(connectionString))
             {
@@ -185,7 +185,8 @@ WHERE id = @id
                 string query = @"
 
 SELECT  id,
-        photo 
+        photo,
+        id_offer 
     
 FROM    dbo.photos_offers
 WHERE id_offer = @id
@@ -197,17 +198,18 @@ WHERE id_offer = @id
                     {
                         while (reader.Read())
                         {
-                            Photo photo = new Photo();
+                            OfferPhoto offerPhoto = new OfferPhoto();
 
-                            photo.Id = (long)reader["id"];
-                            photo.Path = (string)reader["photo"];
+                            offerPhoto.Id = (long)reader["id"];
+                            offerPhoto.Path = (string)reader["photo"];
+                            offerPhoto.IdOffer = (long)reader["id_offer"];
 
-                            photos.Add(photo);
+                            offerPhotos.Add(offerPhoto);
                         }
                     }
                 }
             }
-            return photos;
+            return offerPhotos;
         }
 
 

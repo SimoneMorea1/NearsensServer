@@ -369,8 +369,11 @@ UPDATE [dbo].[places]
 	  ,[subcategory] = @subcategory
 	  ,[lat] = @lat
 	  ,[lng] = @lng
+<<<<<<< HEAD
 	  ,[icon] = @icon
       ,[address] = @address
+=======
+>>>>>>> origin/master
  WHERE id = @id
 ";
                 using (var command = new SqlCommand(query, connection))
@@ -382,8 +385,12 @@ UPDATE [dbo].[places]
                     command.Parameters.Add(new SqlParameter("@subcategory", (object)place.Subcategory ?? DBNull.Value));
                     command.Parameters.Add(new SqlParameter("@lat", (object)place.Lat ?? DBNull.Value));
                     command.Parameters.Add(new SqlParameter("@lng", (object)place.Lng ?? DBNull.Value));
+<<<<<<< HEAD
                     command.Parameters.Add(new SqlParameter("@icon", (object)place.Icon ?? DBNull.Value));
                     command.Parameters.Add(new SqlParameter("@address", place.Address));
+=======
+                 //   command.Parameters.Add(new SqlParameter("@icon", (object)place.Icon ?? DBNull.Value));
+>>>>>>> origin/master
                     int count = command.ExecuteNonQuery();
                 }
             }

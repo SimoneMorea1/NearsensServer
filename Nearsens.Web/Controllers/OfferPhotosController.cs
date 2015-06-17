@@ -8,9 +8,9 @@ using System.Web.Http;
 
 namespace Nearsens.Web.Controllers
 {
-    public class PhotosController : ApiController
+    public class OfferPhotosController : ApiController
     {
-        SqlPlacesRepository repository = new SqlPlacesRepository();
+        SqlOffersRepository repository = new SqlOffersRepository();
 
         [Authorize]
         public void Delete(int[] listaId)

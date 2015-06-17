@@ -30,8 +30,27 @@ namespace Nearsens.Web.Controllers
             };
             return View(list);
         }
+        [Authorize]
+        public ActionResult PlacePhotos(long id)
+        {
+            string userId = placesRepository.GetIdUserOfThePlace(id);
+            string userLogin = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            if (userId.Equals(userLogin))
+            {
+                list = new ModelList
+                {
+                    placePhotos = placesRepository.GetPlacePhotos(id)    
+                };
+                return View(list);
+            }
+            else
+            {
+                return View("../Shared/Error");
+            }
+        }
 
         [Authorize]
+
         public ActionResult PlaceDetail(long id)
         {
             string userId = placesRepository.GetIdUserOfThePlace(id);
@@ -41,7 +60,8 @@ namespace Nearsens.Web.Controllers
                 list = new ModelList
                 {
                     subcategories = subcategoriesRepository.GetAll(),
-                    place = placesRepository.GetPlaceById(id)
+                    place = placesRepository.GetPlaceById(id),
+                    
 
                 };
                 return View(list);

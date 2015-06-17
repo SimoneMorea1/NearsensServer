@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Nearsens.Models
 {
-    public class Photo
+    public class OfferPhoto
     {
         public long Id { get; set; }
-
+        public long IdOffer{ get; set; }
         public string Path { get; set; }
-
-        public long IdPlace { get; set; }
     }
 }
