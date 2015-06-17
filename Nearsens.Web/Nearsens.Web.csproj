@@ -185,6 +185,7 @@
     <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OfferPhotosController.cs" />
     <Compile Include="Controllers\OffersController.cs" />
     <Compile Include="Controllers\PhotosController.cs" />
     <Compile Include="Controllers\PlacesController.cs" />
@@ -261,6 +262,8 @@
     <Content Include="Views\Home\PlaceDetail.cshtml" />
     <Content Include="Views\Home\PlaceOffers.cshtml" />
     <Content Include="Views\Home\OfferDetail.cshtml" />
+    <Content Include="Views\Home\OfferPhotos.cshtml" />
+    <Content Include="Views\Home\PlacePhotos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -46,6 +46,7 @@
     <Compile Include="GetPlaceQuery.cs" />
     <Compile Include="GetPlacesByUserIdQuery.cs" />
     <Compile Include="Offer.cs" />
+    <Compile Include="OfferPhoto.cs" />
     <Compile Include="Photo.cs" />
     <Compile Include="Place.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

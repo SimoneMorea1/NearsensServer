@@ -52,11 +52,33 @@
         }
     </select>
     <br />
+    <br />
+    <p>Main photo</p>
+
+    <img src="\@currentPlace.Icon" id="imgMainPhoto" style="width:300px">
+
+    <br />
+    <br />
+    <div class="modal-body" style="display:none">
+
+        <label class="label label-info col-lg-12" for="mainPhoto">Main photo</label>
+        <br />
+        <input type="file" id="mainPhoto" class="form-control col-lg-10" /> <input id="btnUploadMainPhoto" type="button" class="btn btn-success btn-sm col-lg-2" value="Upload" />
+        <br style="clear:both" />
+
+    </div>
+    <input class="btn btn-group" id="btnDeleteMainPhoto" type="button" value="Delete Main photo" />
+
     <input class="btn btn-group" id="btnUpdatePlace" type="submit" value="Update" />
 </form>
-
+<div class="col-lg-4">
+    <a href="@Url.Action("placePhotos/" + currentPlace.Id, "Home")">
+        <button type="submit" style="margin-top:50%;width:200px;font-size:15px" class="btn btn-default"><span class="glyphicon glyphicon-camera" style="font-size:20px;"></span> MANAGE PHOTOS</button>
+    </a>
+</div>
 @section scripts {
     <script type="text/javascript">
+
         $('#placeDetailForm').on('submit', function (e) {
             e.preventDefault();
 
@@ -88,6 +110,47 @@
                 }
             });
         });
-    </script>
+
+
+    var newPlaceId = @currentPlace.Id;
+
+    $('#btnUploadMainPhoto').on('click', function () {
+
+        var files = $("#mainPhoto").get(0).files;
+        if (files.length > 0) {
+            var mainPhoto = new FormData();
+            mainPhoto.append("file0", files[0]);
+            uploadMainPhoto(mainPhoto);
+        }
+    });
+
+
+    $('#btnDeleteMainPhoto').on('click', function() {
+        $('#imgMainPhoto').fadeOut();
+        $('.modal-body').fadeIn();
+    });
+
+  
+
+
+    function uploadMainPhoto(mainPhoto) {
+        $.ajax({
+            type: "POST",
+            url: "/api/FileUpload/UploadPlaceIcon?placeId=" + newPlaceId,
+            contentType: false,
+            processData: false,
+            data: mainPhoto,
+            success: function (messages) {
+                alert('Photo uploaded');
+            },
+            error: function (error) {
+                alert("Upload failed");
+            }
+        });
+    }
+
+
+</script>
+
 }
 

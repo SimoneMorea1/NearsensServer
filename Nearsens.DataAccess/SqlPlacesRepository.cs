@@ -63,24 +63,27 @@ WHERE id = @id
                             place.Lng = (double)reader["lng"];
                             place.Address = (string)reader["address"];
                             place.Icon = reader["icon"] == DBNull.Value ? (string)null : (string)reader["icon"];
-
+                           
                         }
                     }
                 }
             }
-            place.Photos = GetPlacePhotos(id);
+            //place.Photos = GetPlacePhotos(id);
             return place;
         }
 
-        public IEnumerable<string> GetPlacePhotos(long id)
+        public IEnumerable<Photo> GetPlacePhotos(long id)
         {
-            List<string> photos = new List<string>();
+            List<Photo> photos = new List<Photo>();
+
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
                 string query = @"
-SELECT  photo 
+SELECT  id,
+        id_place,
+        photo 
       
 FROM    dbo.photos
 WHERE id_place = @id
@@ -91,8 +94,12 @@ WHERE id_place = @id
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
-                        {
-                            var photo = (string)reader["photo"];
+                        {   Photo photo = new Photo();
+
+                            photo.Id = (long)reader["Id"];
+                            photo.Path = (string)reader["photo"];
+                            photo.IdPlace = (long)reader["id_place"];
+                             
                             photos.Add(photo);
                         }
                     }
@@ -321,6 +328,33 @@ WHERE id = @id;";
                 }
             }
         }
+        public void DeletePhotos(int[] listaId)
+        {
+
+            for (int i = 0; i < listaId.Length; i++)
+            {
+
+                DeletePhoto(listaId[i]);
+            }
+        }
+        public void DeletePhoto(int id)
+        {
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = @"
+DELETE FROM [dbo].[photos]
+ WHERE id = @id";
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.Add(new SqlParameter("@id", id));
+
+                    int count = command.ExecuteNonQuery();
+                }
+            }
+        }
         public void UpdatePlace(Place place)
         {
             using (var connection = new SqlConnection(connectionString))
@@ -335,7 +369,6 @@ UPDATE [dbo].[places]
 	  ,[subcategory] = @subcategory
 	  ,[lat] = @lat
 	  ,[lng] = @lng
-	  ,[icon] = @icon
  WHERE id = @id
 ";
                 using (var command = new SqlCommand(query, connection))
@@ -347,7 +380,7 @@ UPDATE [dbo].[places]
                     command.Parameters.Add(new SqlParameter("@subcategory", (object)place.Subcategory ?? DBNull.Value));
                     command.Parameters.Add(new SqlParameter("@lat", (object)place.Lat ?? DBNull.Value));
                     command.Parameters.Add(new SqlParameter("@lng", (object)place.Lng ?? DBNull.Value));
-                    command.Parameters.Add(new SqlParameter("@icon", (object)place.Icon ?? DBNull.Value));
+                 //   command.Parameters.Add(new SqlParameter("@icon", (object)place.Icon ?? DBNull.Value));
                     int count = command.ExecuteNonQuery();
                 }
             }

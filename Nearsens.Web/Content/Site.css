@@ -26,6 +26,13 @@ textarea {
 .input-error {
     border:1px solid #db2a2a;
 }
+.imgPlacePhoto{
+    width:20%;
+    float:left;
+}
+.imgPlacePhoto img{
+    width:90%;
+}
 .imgPhotoOffer{
     width:20%;
     float:left;
