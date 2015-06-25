@@ -403,7 +403,6 @@ UPDATE [dbo].[places]
 	  ,[subcategory] = @subcategory
 	  ,[lat] = @lat
 	  ,[lng] = @lng
-	  ,[icon] = @icon
       ,[address] = @address
  WHERE id = @id
 ";
@@ -426,14 +425,12 @@ UPDATE [dbo].[places]
         {
             if (category == null && subcategory == null)
                 return query;
-            query += " WHERE ";
             if (category != null)
-                query += "main_category = @category AND ";
+                query += " AND main_category = @category";
             if (subcategory != null)
-                query += "subcategory = @subcategory AND ";
-            
-            return query.Remove(query.LastIndexOf("AND"));
+                query += " AND subcategory = @subcategory";
 
+            return query;
         }
 
         private string BuildValuesClause(string query, int pathsCount)
