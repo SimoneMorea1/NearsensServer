@@ -455,13 +455,12 @@ UPDATE [dbo].[offers]
         {
             if (category == null && subcategory == null)
                 return query;
-            query += " AND ";
             if (category != null)
-                query += "main_category = @category AND ";
+                query += " AND main_category = @category";
             if (subcategory != null)
-                query += "subcategory = @subcategory AND ";
+                query += " AND subcategory = @subcategory";
 
-            return query.Remove(query.LastIndexOf("AND"));
+            return query;
         }
 
         private string BuildValuesClause(string query, int pathsCount)
