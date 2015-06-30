@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Nearsens.Models
 {
     public class Place
     {
+        [Required]
         public long Id { get; set; }
+
+        [Required]
         public string MainCategory { get; set; }
         public string Subcategory { get; set; }
         public string Name { get; set; }

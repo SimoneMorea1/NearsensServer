@@ -284,6 +284,10 @@
       <Project>{84664849-f706-497c-8ffc-d377dabbf505}</Project>
       <Name>Nearsens.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Nearsens.Utilities\Nearsens.Utilities.csproj">
+      <Project>{439d5082-0be6-4749-bd7b-e83d26ea9645}</Project>
+      <Name>Nearsens.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

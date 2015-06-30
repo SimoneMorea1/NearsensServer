@@ -244,7 +244,7 @@ WHERE id_offer = @id
             }
             return photos;
         }
-        public void DeletePhotos(int[] listaId)
+        public void DeletePhotos(long[] listaId)
         {
      
             for( int i = 0 ; i < listaId.Length; i++){
@@ -252,7 +252,7 @@ WHERE id_offer = @id
                 DeletePhoto(listaId[i]);
             }
         }
-        public void DeletePhoto(int id)
+        public void DeletePhoto(long id)
         {
 
             using (var connection = new SqlConnection(connectionString))

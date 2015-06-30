@@ -1,10 +1,13 @@
 ﻿using Nearsens.DataAccess;
+using Nearsens.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Nearsens.Utilities;
+using System.Web;
 
 namespace Nearsens.Web.Controllers
 {
@@ -13,9 +16,10 @@ namespace Nearsens.Web.Controllers
         SqlOffersRepository repository = new SqlOffersRepository();
 
         [Authorize]
-        public void Delete(int[] listaId)
+        public void Delete([FromBody] DeletePhotosCommand deletePhotos)
         {
-            repository.DeletePhotos(listaId);
+            repository.DeletePhotos(deletePhotos.PhotosId);
+            deletePhotos.DeleteFromFileSystem(HttpContext.Current.Server);
         }
     }
 }

@@ -35,14 +35,18 @@
 
         var listaId = new Array();
         var arrayIndex = 0;
+        var deletePhotos = {};
+        deletePhotos.PhotosId = [];
+        deletePhotos.PhotosPath = [];
+
         $('.imgPhotoOffer').on('click', function () {
 
             if($(this).hasClass('selezionato')){
-                
+
                 $(this).removeClass('selezionato');
             }
             else{
-                
+
                 $(this).addClass('selezionato');
             }
         });
@@ -51,18 +55,20 @@
 
             $(".selezionato").each(function (i) {
 
-                listaId[arrayIndex] = $(this).children().attr('data-id');
+                deletePhotos.PhotosId[arrayIndex] = $(this).children().attr('data-id');
+                deletePhotos.PhotosPath[arrayIndex] = $(this).children().attr('src');
                 arrayIndex++;
 
             });
 
+            deletePhotos.PlaceId = @currentOffer.IdPlace;
 
             $.ajax({
                 url: '/api/OfferPhotos/',
                 type: 'DELETE',
                 contentType: 'application/json',
                 dataType: 'json',
-                data: JSON.stringify(listaId),
+                data: JSON.stringify(deletePhotos),
                 success: function (data) {
                     alert('Photos Deleted');
                     location.reload();
@@ -86,7 +92,7 @@
         });
 
         function uploadPhotos(photos) {
-          
+
             $.ajax({
                 type: "POST",
                 url: "/api/FileUpload/UploadOfferPhotos?offerId=" + @currentOffer.Id + "&placeId=" + @currentOffer.IdPlace,

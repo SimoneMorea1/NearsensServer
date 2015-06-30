@@ -7,10 +7,9 @@
 <h2>Manage Photos</h2>
 <p>Select the photo that you would like to delete and the click on the button "DELETE PHOTO"</p>
 @{
-
     foreach (Nearsens.Models.Photo photo in Model.placePhotos)
     {
-        placeId = @photo.IdPlace;
+        placeId = photo.IdPlace;
                  
         <div class="imgPlacePhoto">
             <img src="\@photo.Path" data-id="@photo.Id" />
@@ -33,75 +32,82 @@
 
     <script>
 
-        var listaId = new Array();
-        var arrayIndex = 0;
-        $('.imgPlacePhoto').on('click', function () {
+    var listaId = new Array();
+    var arrayIndex = 0;
+    var deletePhotos = {};
+    deletePhotos.PhotosId = [];
+    deletePhotos.PhotosPath = [];
 
-            if($(this).hasClass('selezionato')){
+    $('.imgPlacePhoto').on('click', function () {
 
-                $(this).removeClass('selezionato');
-            }
-            else{
+        if($(this).hasClass('selezionato')){
 
-                $(this).addClass('selezionato');
-            }
-        });
-
-        $('#btnDeletePhotos').on('click', function () {
-
-            $(".selezionato").each(function (i) {
-
-                listaId[arrayIndex] = $(this).children().attr('data-id');
-                arrayIndex++;
-
-            });
-
-
-            $.ajax({
-                url: '/api/Photos/',
-                type: 'DELETE',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify(listaId),
-                success: function (data) {
-                    alert('Photos Deleted');
-                    location.reload();
-                },
-                error: function (error) {
-                    alert('Error on Login' + error.statusCode);
-                }
-            });
-        });
-
-        $('#btnUploadPhotos').on('click', function () {
-
-            var files = $("#photos").get(0).files;
-            if (files.length > 0) {
-                var photos = new FormData();
-                for (i = 0; i < files.length; i++) {
-                    photos.append("file" + i, files[i]);
-                }
-                uploadPhotos(photos);
-            }
-        });
-
-        function uploadPhotos(photos) {
-
-            $.ajax({
-                type: "POST",
-                url: "/api/FileUpload/UploadPlacePhotos?placeId="+@placeId,
-                contentType: false,
-                processData: false,
-                data: photos,
-                success: function (messages) {
-                    alert('Photos uploaded');
-                    location.reload();
-                },
-                error: function (error) {
-                    alert("Upload failed");
-                }
-            });
+            $(this).removeClass('selezionato');
         }
+        else{
 
-    </script>
+            $(this).addClass('selezionato');
+        }
+    });
+
+    $('#btnDeletePhotos').on('click', function () {
+
+        $(".selezionato").each(function (i) {
+
+            deletePhotos.PhotosId[arrayIndex] = $(this).children().attr('data-id');
+            deletePhotos.PhotosPath[arrayIndex] = $(this).children().attr('src');
+            arrayIndex++;
+
+        });
+
+        deletePhotos.PlaceId = @Request.Url.Segments.Last();
+
+
+        $.ajax({
+            url: '/api/Photos/',
+            type: 'DELETE',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(deletePhotos),
+            success: function (data) {
+                alert('Photos Deleted');
+                location.reload();
+            },
+            error: function (error) {
+                alert('Error on Login' + error.statusCode);
+            }
+        });
+    });
+
+    $('#btnUploadPhotos').on('click', function () {
+
+        var files = $("#photos").get(0).files;
+        if (files.length > 0) {
+            var photos = new FormData();
+            for (i = 0; i < files.length; i++) {
+                photos.append("file" + i, files[i]);
+            }
+            uploadPhotos(photos);
+        }
+    });
+
+    function uploadPhotos(photos) {
+
+        $.ajax({
+            type: "POST",
+            url: "/api/FileUpload/UploadPlacePhotos?placeId=" + @Request.Url.Segments.Last(),
+            contentType: false,
+            processData: false,
+            data: photos,
+            success: function (messages) {
+                alert('Photos uploaded');
+                location.reload();
+            },
+            error: function (error) {
+                alert("Upload failed");
+            }
+        });
+    }
+
+</script>
 }

@@ -44,6 +44,8 @@ namespace Nearsens.Web.Controllers
         [Authorize]
         public long Post([FromBody]Place place)
         {
+            if (!ModelState.IsValid) return -1;
+
             place.UserId = HttpContext.Current.User.Identity.GetUserId();
             return repository.InsertPlace(place);
         }

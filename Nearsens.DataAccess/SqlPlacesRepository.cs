@@ -96,7 +96,7 @@ WHERE id_place = @id
                         while (reader.Read())
                         {   Photo photo = new Photo();
 
-                            photo.Id = (long)reader["Id"];
+                            photo.Id = (long)reader["id"];
                             photo.Path = (string)reader["photo"];
                             photo.IdPlace = (long)reader["id_place"];
                              
@@ -362,7 +362,7 @@ WHERE id = @id;";
                 }
             }
         }
-        public void DeletePhotos(int[] listaId)
+        public void DeletePhotos(long[] listaId)
         {
 
             for (int i = 0; i < listaId.Length; i++)
@@ -371,7 +371,7 @@ WHERE id = @id;";
                 DeletePhoto(listaId[i]);
             }
         }
-        public void DeletePhoto(int id)
+        public void DeletePhoto(long id)
         {
 
             using (var connection = new SqlConnection(connectionString))
