@@ -1,4 +1,5 @@
 ﻿using Nearsens.DataAccess;
+using Nearsens.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,13 @@ namespace Nearsens.Web.Controllers
             var userId = HttpContext.Current.User.Identity.GetUserId();
             repository.DeletePhotos(deletePhotos.PhotosId);
             deletePhotos.DeleteFromFileSystem(HttpContext.Current.Server);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IEnumerable<Photo> GetPhotosOfThePlace(long idPlace)
+        {
+             return repository.GetPlacePhotos(idPlace);
         }
     }
 }

@@ -21,5 +21,12 @@ namespace Nearsens.Web.Controllers
             repository.DeletePhotos(deletePhotos.PhotosId);
             deletePhotos.DeleteFromFileSystem(HttpContext.Current.Server);
         }
+
+        [Authorize]
+        [HttpGet]
+        public IEnumerable<OfferPhoto> GetPhotosOfTheOffer(long idOffer)
+        {
+            return repository.GetOfferPhotos(idOffer);
+        }
     }
 }

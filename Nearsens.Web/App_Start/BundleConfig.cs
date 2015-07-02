@@ -23,9 +23,17 @@ namespace Nearsens.Web
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/alertify").Include(
+                      "~/Scripts/alertify.min.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+            
+            bundles.Add(new StyleBundle("~/Content/alertify").Include(
+                    "~/Content/alertify.default.css",
+                    "~/Content/alertify.core.css"));
+
         }
     }
 }

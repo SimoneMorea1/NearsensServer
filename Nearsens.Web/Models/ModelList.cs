@@ -16,5 +16,6 @@ namespace Nearsens.Web.Models
         public IEnumerable<string> subcategories;
         public IEnumerable<OfferPhoto> offerPhotosList;
         public IEnumerable<Photo> placePhotos;
+        public string userId;
     }
 }
