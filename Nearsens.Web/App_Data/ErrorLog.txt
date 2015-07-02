@@ -5,3 +5,143 @@ Source: FileUploadController
 Stack Trace: 
    in Nearsens.Web.Controllers.FileUploadController.<DoSomething>d__27.MoveNext() in c:\Users\ITS\Documents\Visual Studio 2013\Projects\Nearsens\Nearsens.Web\Controllers\FileUploadController.cs:riga 146
 
+********** 01/07/2015 11:42:17 **********
+Inner Exception Type: System.InvalidOperationException
+Inner Exception: The stream provider of type 'MyStreamProvider' threw an exception.
+Inner Source: System.Net.Http.Formatting
+Inner Stack Trace: 
+   in System.Net.Http.MimeBodyPart.GetOutputStream()
+   in System.Net.Http.MimeBodyPart.<WriteSegment>d__0.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   in System.Net.Http.HttpContentMultipartExtensions.<MultipartReadAsync>d__8.MoveNext()
+Exception Type: System.IO.IOException
+Exception: Error writing MIME multipart body part to output stream.
+Source: FileUploadController
+Stack Trace: 
+   in System.Net.Http.HttpContentMultipartExtensions.<MultipartReadAsync>d__8.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   in System.Net.Http.HttpContentMultipartExtensions.<ReadAsMultipartAsync>d__0`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   in Nearsens.Web.Controllers.FileUploadController.<DoSomething>d__27.MoveNext() in c:\Users\Bobbo\Documents\Nearsens\NearsensServer\Nearsens.Web\Controllers\FileUploadController.cs:riga 147
+
+********** 01/07/2015 14:34:07 **********
+Inner Exception Type: System.InvalidOperationException
+Inner Exception: The stream provider of type 'MyStreamProvider' threw an exception.
+Inner Source: System.Net.Http.Formatting
+Inner Stack Trace: 
+   in System.Net.Http.MimeBodyPart.GetOutputStream()
+   in System.Net.Http.MimeBodyPart.<WriteSegment>d__0.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   in System.Net.Http.HttpContentMultipartExtensions.<MultipartReadAsync>d__8.MoveNext()
+Exception Type: System.IO.IOException
+Exception: Error writing MIME multipart body part to output stream.
+Source: FileUploadController
+Stack Trace: 
+   in System.Net.Http.HttpContentMultipartExtensions.<MultipartReadAsync>d__8.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   in System.Net.Http.HttpContentMultipartExtensions.<ReadAsMultipartAsync>d__0`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   in Nearsens.Web.Controllers.FileUploadController.<DoSomething>d__27.MoveNext() in c:\Users\Bobbo\Documents\Nearsens\NearsensServer\Nearsens.Web\Controllers\FileUploadController.cs:riga 147
+
+********** 02/07/2015 11:00:25 **********
+Inner Exception Type: System.InvalidOperationException
+Inner Exception: The stream provider of type 'MyStreamProvider' threw an exception.
+Inner Source: System.Net.Http.Formatting
+Inner Stack Trace: 
+   in System.Net.Http.MimeBodyPart.GetOutputStream()
+   in System.Net.Http.MimeBodyPart.<WriteSegment>d__0.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   in System.Net.Http.HttpContentMultipartExtensions.<MultipartReadAsync>d__8.MoveNext()
+Exception Type: System.IO.IOException
+Exception: Error writing MIME multipart body part to output stream.
+Source: FileUploadController
+Stack Trace: 
+   in System.Net.Http.HttpContentMultipartExtensions.<MultipartReadAsync>d__8.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   in System.Net.Http.HttpContentMultipartExtensions.<ReadAsMultipartAsync>d__0`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   in Nearsens.Web.Controllers.FileUploadController.<DoSomething>d__27.MoveNext() in c:\Users\Bobbo\Documents\Nearsens\NearsensServer\Nearsens.Web\Controllers\FileUploadController.cs:riga 147
+
+********** 02/07/2015 11:37:39 **********
+Inner Exception Type: System.InvalidOperationException
+Inner Exception: The stream provider of type 'MyStreamProvider' threw an exception.
+Inner Source: System.Net.Http.Formatting
+Inner Stack Trace: 
+   in System.Net.Http.MimeBodyPart.GetOutputStream()
+   in System.Net.Http.MimeBodyPart.<WriteSegment>d__0.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   in System.Net.Http.HttpContentMultipartExtensions.<MultipartReadAsync>d__8.MoveNext()
+Exception Type: System.IO.IOException
+Exception: Error writing MIME multipart body part to output stream.
+Source: FileUploadController
+Stack Trace: 
+   in System.Net.Http.HttpContentMultipartExtensions.<MultipartReadAsync>d__8.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   in System.Net.Http.HttpContentMultipartExtensions.<ReadAsMultipartAsync>d__0`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   in Nearsens.Web.Controllers.FileUploadController.<DoSomething>d__27.MoveNext() in c:\Users\Bobbo\Documents\Nearsens\NearsensServer\Nearsens.Web\Controllers\FileUploadController.cs:riga 147
+
+********** 02/07/2015 11:55:29 **********
+Inner Exception Type: System.InvalidOperationException
+Inner Exception: The stream provider of type 'MyStreamProvider' threw an exception.
+Inner Source: System.Net.Http.Formatting
+Inner Stack Trace: 
+   in System.Net.Http.MimeBodyPart.GetOutputStream()
+   in System.Net.Http.MimeBodyPart.<WriteSegment>d__0.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   in System.Net.Http.HttpContentMultipartExtensions.<MultipartReadAsync>d__8.MoveNext()
+Exception Type: System.IO.IOException
+Exception: Error writing MIME multipart body part to output stream.
+Source: FileUploadController
+Stack Trace: 
+   in System.Net.Http.HttpContentMultipartExtensions.<MultipartReadAsync>d__8.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   in System.Net.Http.HttpContentMultipartExtensions.<ReadAsMultipartAsync>d__0`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   in System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   in System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   in Nearsens.Web.Controllers.FileUploadController.<DoSomething>d__27.MoveNext() in c:\Users\Bobbo\Documents\Nearsens\NearsensServer\Nearsens.Web\Controllers\FileUploadController.cs:riga 147
+

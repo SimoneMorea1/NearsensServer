@@ -79,6 +79,10 @@
 @section scripts {
     <script type="text/javascript">
 
+     
+
+        //alertify.log( "PROVA", "success" );
+
         $('#placeDetailForm').on('submit', function (e) {
             e.preventDefault();
 
@@ -102,11 +106,23 @@
                 dataType: 'json',
                 data: JSON.stringify(place),
                 success: function (data) {
-                    alert('Place updated');
-                    location.reload();
+                   
+                    alertify.set({ buttonFocus: "cancel" });
+                   /* alertify.("Place Updated", function (e) {
+                        if (e) {
+                            location.reload();
+                        }
+                    });
+                    */
+                    alertify.confirm("PRO");
                 },
                 error: function (error) {
-                    alert('Error on Login' + error.statusCode);
+                    
+                    alertify.error("Error on update", function (e) {
+                        if (e) {
+                            location.reload();
+                        }
+                    });
                 }
             });
         });
@@ -120,7 +136,7 @@
         if (files.length > 0) {
             var mainPhoto = new FormData();
             mainPhoto.append("file0", files[0]);
-            uploadMainPhoto(mainPhoto);
+            uploadMainPhoto(mainPhoto); 
         }
     });
 

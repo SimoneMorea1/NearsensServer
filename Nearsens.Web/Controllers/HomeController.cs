@@ -40,6 +40,8 @@ namespace Nearsens.Web.Controllers
                 list = new ModelList
                 {
                     placePhotos = placesRepository.GetPlacePhotos(id)    
+                    ,
+                    userId = userLogin
                 };
                 return View(list);
             }

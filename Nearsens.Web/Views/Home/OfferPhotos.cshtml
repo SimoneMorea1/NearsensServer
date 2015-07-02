@@ -3,105 +3,300 @@
     ViewBag.Title = "OfferPhotos";
 
     var currentOffer = Model.offerDetail;
+    long offerId = 0;
+    string userId = Model.userId;
+    var placeId = currentOffer.IdPlace;
 }
+<div class="col-lg-12" style="clear:both;padding-top:15px;">
 
-<h2>Manage Photos</h2>
-<p>Select the photo that you would like to delete and the click on the button "DELETE PHOTO"</p>
-@{
-    
-    foreach (Nearsens.Models.OfferPhoto photo in Model.offerPhotosList)
-        {
+    <h2>Manage Photos</h2>
+    <label class="label label-info col-lg-12" for="photos">Add Photos</label>
+    <br />
+    <input type="file" id="photos" class="form-control col-lg-10" multiple /> <input id="btnUploadPhotos" type="button" class="btn btn-success btn-sm col-lg-2" value="Upload" />
+    <p id="photosNumber" style="float:left;margin-left:15%;">0 photo selected</p>
+    <div class="btnContainer" style="float:left;margin-left:2%;width:auto">
+        <input type="button" id="btnDeletePhotos" class="btn btn-danger btn-sm col-lg-2" style="width:100%" value="DELETE PHOTOS" />
+        <input type="button" id="selectAll" class="btn btn-group btn-sm col-lg-2" style="width:100%;margin-top:20px;" value="SELECT ALL" />
+    </div>
+    <div class="col-lg-4" style="clear:left;margin-top:0px;padding-left:10px;">
 
-        <div class="imgPhotoOffer">
-            <img src="\@photo.Path" data-id="@photo.Id" />
+        <div class="progressBar" style="display:none">
+
+            <div id="progressBarContainer">
+
+            </div>
+
         </div>
+
+        <span id="percentualComplete"></span>
+
+    </div>
+    <p style="clear:both;padding-top:20px;float:left">Select the photo that you would like to delete and the click on the button "DELETE PHOTO"</p>
+
+</div>
+
+<div class="photosContainer" style="margin-top:250px;">
+    @{
+        int i = 0;
+        foreach (Nearsens.Models.OfferPhoto photo in Model.offerPhotosList)
+        {
+            offerId = photo.IdOffer;
+
+            if (i == 5)
+            {
+                i = 0;
+                <div class="imgPhotoOffer" style="clear:both">
+                    <img src="\@photo.Path" data-id="@photo.Id" />
+                </div>
+            }
+            else
+            {
+                <div class="imgPhotoOffer">
+                    <img src="\@photo.Path" data-id="@photo.Id" />
+                </div>
+
+            }
+
+            i++;
+
+
+        }
     }
 
-    <input type="button" id="btnDeletePhotos" value="DELETE PHOTOS" />
-}
+</div>
+    <br />
+    <br />
+    <br />
 
-<br />
-<br />
-<br />
-<div class="col-lg-12" style="clear:both;padding-top:30px;">
-    <label class="label label-info col-lg-12" for="photos">Add Photos</label>
-<br />
-<input type="file" id="photos" class="form-control col-lg-10" multiple /> <input id="btnUploadPhotos" type="button" class="btn btn-success btn-sm col-lg-2" value="Upload" />
-   </div>
 
-@section scripts{
+    @section scripts{
 
-    <script>
+        <script>
+            
 
-        var listaId = new Array();
-        var arrayIndex = 0;
-        $('.imgPhotoOffer').on('click', function () {
+            var userId = '@userId';
+            var offerId = @Request.Url.Segments.Last();
+            var placeId = @placeId; 
 
-            if($(this).hasClass('selezionato')){
+            var listaId = new Array();
+            var arrayIndex = 0;
+            var currentWidth = 0;
+            var selectedPhotoCounter = 0;
+            
+            var xhr = new XMLHttpRequest();
+
+
+            var listaId = new Array();
+            var arrayIndex = 0;
+       
+            $('.photosContainer').on('click', '.imgPhotoOffer',function () {
+
+
+                if($(this).hasClass('selezionato')){
+
+                    $(this).removeClass('selezionato');
+                }
+                else{
+
+                    $(this).addClass('selezionato');
+                }
+
+                countSelectedPhotos();
+
+            });
+
+        
+            function countSelectedPhotos(){
+
+                selectedPhotoCounter = 0;
+
+                $(".selezionato").each(function (i) {
+
+                    selectedPhotoCounter++;
+                });
+
+                $('#photosNumber').html(selectedPhotoCounter + ' selected photos');
+            }
+
+
+            $('#selectAll').on('click', function () {
+
+                $('.photosContainer').children().addClass('selezionato');
+                countSelectedPhotos();
+
+            });
+
+            $('#btnDeletePhotos').on('click', function () {
+
+                if(selectedPhotoCounter > 0){
+
+                    $(".selezionato").each(function (i) {
+
+                        listaId[arrayIndex] = $(this).children().attr('data-id');
+                        arrayIndex++;
+
+                    });
+
+
+                    $.ajax({
+                        url: '/api/OfferPhotos/',
+                        type: 'DELETE',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify(listaId),
+                        success: function (data) {
+                            alert('Photos Deleted');
+                            addLoader();
+                            getUpdatedPhotos();
+                        },
+                        error: function (error) {
+                            alert('Error on Login' + error.statusCode);
+                        }
+                    });
+                }
+                else{
+                    alert("No photos were selected")
+                }
+            });
+
+
+            
+            function uploadPhotos(photos){
+
+                $.ajax({
+                    xhr: function() {
+                        var xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress", function(evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = (evt.loaded / evt.total)*100;
+                                riempiBarra(percentComplete)
+                            }
+                        }, false);
+
+                        xhr.addEventListener("progress", function(evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = (evt.loaded / evt.total)*100;
+
+                                // console.log(percentComplete)
+                           
+                            }
+                        }, false);
+
+                        return xhr;
+                    },
+                    type: 'POST',
+                    url: "/api/FileUpload/UploadOfferPhotos?offerId="+offerId + "&placeId="+placeId,
+                    contentType: false,
+                    processData: false,
+                    data: photos,
+                    success: function(data){
+                    
+
+                        addLoader();
+                        // Quando carico nuove foto faccio chiamata ajax per riprenderle in modo 
+                        // da avere anche l'id e poterle cancellare direttamente senza dover ricaricare la pagina
+
+                        getUpdatedPhotos();
                 
-                $(this).removeClass('selezionato');
+                    }
+                });
             }
-            else{
+      
+            $('#btnUploadPhotos').on('click', function () {
+
+               // svuotaBarra();
+                var files = $("#photos").get(0).files;
+                if (files.length > 0) {
+                    var photos = new FormData();
+                    for (i = 0; i < files.length; i++) {
+                        photos.append("file" + i, files[i]);
+                    }
+                    uploadPhotos(photos)
+                }
+            });
+    
+            function riempiBarra(percentuale){
+
+                /*
+                var daAumentare = 0;
+                if(currentWidth == 0)
+                    currentWidth =  ~~percentuale;
+                else{
+                    var prec = currentWidth;
+                    currentWidth = currentWidth + (percentuale - currentWidth);
+                    daAumentare = percentuale - prec;
+    
+                }
+    
+    
                 
-                $(this).addClass('selezionato');
+                console.log(currentWidth)
+    
+                $('#progressBarContainer').animate({
+    
+                    width: '+=' + ~~daAumentare +"%",
+    
+                    }, 100, function () {
+    
+                });
+    
+                */
+                $('#percentualComplete').html('<p>' + ~~percentuale + '%</p>');
+
             }
-        });
 
-        $('#btnDeletePhotos').on('click', function () {
-
-            $(".selezionato").each(function (i) {
-
-                listaId[arrayIndex] = $(this).children().attr('data-id');
-                arrayIndex++;
-
-            });
-
-
-            $.ajax({
-                url: '/api/OfferPhotos/',
-                type: 'DELETE',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify(listaId),
-                success: function (data) {
-                    alert('Photos Deleted');
-                    location.reload();
-                },
-                error: function (error) {
-                    alert('Error on Login' + error.statusCode);
-                }
-            });
-        });
-
-        $('#btnUploadPhotos').on('click', function () {
-
-            var files = $("#photos").get(0).files;
-            if (files.length > 0) {
-                var photos = new FormData();
-                for (i = 0; i < files.length; i++) {
-                    photos.append("file" + i, files[i]);
-                }
-                uploadPhotos(photos);
+            function svuotaBarra(){
+                $('#progressBarContainer').css('width','0px');
             }
-        });
 
-        function uploadPhotos(photos) {
-          
-            $.ajax({
-                type: "POST",
-                url: "/api/FileUpload/UploadOfferPhotos?offerId=" + @currentOffer.Id + "&placeId=" + @currentOffer.IdPlace,
-                contentType: false,
-                processData: false,
-                data: photos,
-                success: function (messages) {
-                    alert('Photos uploaded');
-                    location.reload();
-                },
-                error: function (error) {
-                    alert("Upload failed");
-                }
-            });
-        }
+        
+            function addLoader(){
 
-</script>
-}
+                $('.photosContainer').html('');
+
+                $('.photosContainer').html('<div class="loaderDiv">'
+                                              +'<div class="spinnerDiv">'
+                                              +' <i class="fa fa-spinner fa-pulse"></i>'
+                                              +'<p>Caricamento</p></div>'
+                                            +'</div>');
+            }
+            function removeLoader(){
+                $('.loaderDiv').fadeOut();
+            }
+
+            function getUpdatedPhotos(){
+                $.ajax({
+                    type: "GET",
+                    url: "/api/OfferPhotos?idOffer=" + offerId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (msg) {
+
+                        removeLoader();
+                        countSelectedPhotos();
+                        $('.photosContainer').html('');
+
+                        for (i = 0 ; i < msg.length; i++) {
+                            if(i % 5 == 0){
+
+                                $('.photosContainer').append('<div class="imgPhotoOffer" style="clear:left">'
+                                                        +'<img src="/'+ msg[i].Path + '" data-id='+msg[i].Id+' />'
+                                                         +'</div>');
+                            }
+                            else{
+
+                                $('.photosContainer').append('<div class="imgPhotoOffer">'
+                                                        +'<img src="/'+ msg[i].Path + '" data-id='+msg[i].Id+' />'
+                                                         +'</div>');
+                            }
+                        }
+
+                    },
+                    error: function (msg) {
+                        alert('error');
+                    }
+
+                });
+            }
+        </script>
+    }
